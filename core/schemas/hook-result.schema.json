@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/hook-result/v0",
+  "title": "Resultado de hook neutro v0",
+  "description": "Saída de um hook do núcleo: um único objeto JSON no stdout, com exit code coerente com `decision` (0 = allow/ask, 2 = block). Toda decisão que não seja allow traz uma mensagem escrita para o agente: o que falhou, por quê e o que fazer no lugar (P15). Ver docs/contracts/hooks.md.",
+  "type": "object",
+  "required": ["contract", "hook", "decision"],
+  "additionalProperties": false,
+  "properties": {
+    "contract": { "const": "hook/v0" },
+    "hook": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "Nome do hook do núcleo, ex.: stop_gate." },
+    "decision": { "enum": ["allow", "ask", "block"] },
+    "message": {
+      "type": "object",
+      "required": ["what", "why", "instead"],
+      "additionalProperties": false,
+      "properties": {
+        "what": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "why": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "instead": { "type": "string", "minLength": 1, "maxLength": 300 }
+      }
+    },
+    "context": {
+      "type": "array",
+      "description": "Linhas injetadas no contexto do agente (session_start, pre_compact). Teto de 20 linhas (HG M3, §4.4).",
+      "maxItems": 20,
+      "items": { "type": "string", "maxLength": 200 }
+    },
+    "log": { "type": "string", "description": "Caminho do log completo, quando houver." }
+  },
+  "allOf": [
+    { "if": { "properties": { "decision": { "enum": ["ask", "block"] } } }, "then": { "required": ["message"] } }
+  ]
+}

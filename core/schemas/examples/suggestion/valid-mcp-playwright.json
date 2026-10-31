@@ -1,0 +1,10 @@
+{
+  "id": "mcp-playwright", "kind": "mcp",
+  "when": { "any": ["web-ui-detected", "e2e-missing"] },
+  "answers": "Como verificar comportamento de interface no navegador?",
+  "why": "Requisitos de interface precisam de E2E real (cap. 13, Teste Fake; cap. 16).",
+  "contextCost": "ferramentas do MCP no contexto enquanto ativo",
+  "source": "https://github.com/microsoft/playwright-mcp",
+  "trust": "oficial",
+  "guide": ["cap. 13", "cap. 16"]
+}

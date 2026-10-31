@@ -1,0 +1,15 @@
+[project]
+name = "generic-harness"
+version = "0.0.0"
+description = "Harness externo, genérico e vendorizável para agentes de código (Claude Code, Cursor, Codex)."
+requires-python = ">=3.10"
+# O que é vendorizado no hospedeiro (core/, adapters/) usa só a biblioteca padrão (ADR-0004).
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8", "jsonschema>=4.20"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"

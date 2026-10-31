@@ -1,0 +1,4 @@
+{
+  "schema": 0, "source": { "url": "https://x", "commit": "cccccccccccccccccccccccccccccccccccccccc" }, "harnessVersion": "0.1.0", "installedAt": "2026-11-02T10:00:00Z",
+  "tools": ["claude-code"], "files": [ { "path": ".harness/bin/harness", "from": "core/cli/harness.py", "mode": "copy" } ], "blocks": []
+}

@@ -1,0 +1,6 @@
+{
+  "schema": 0,
+  "project": { "name": "x", "kind": "greenfield" },
+  "commands": {},
+  "boundaries": { "always": [], "ask": [], "never": [] }
+}

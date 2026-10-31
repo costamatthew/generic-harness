@@ -1,0 +1,7 @@
+{
+  "id": "R12", "level": "P1", "kind": "computational", "scope": "app", "check": "commands-cited-exist",
+  "title": "todo comando citado existe no task runner, no manifesto ou no CI",
+  "guide": ["cap. 17", "Ap. A"],
+  "evidence": "lista de comandos citados × fontes onde foram encontrados",
+  "fix": { "recipe": "agents-md-commands", "size": "quick" }
+}

@@ -1,0 +1,2 @@
+{ "id": "context7", "kind": "mcp", "when": { "any": ["external-deps"] }, "why": "cap. 4", "contextCost": "2 tools",
+  "source": "https://context7.com", "trust": "comunidade" }

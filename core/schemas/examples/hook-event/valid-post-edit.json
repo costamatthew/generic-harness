@@ -1,0 +1,6 @@
+{
+  "contract": "hook/v0", "event": "post_edit",
+  "source": { "tool": "claude-code", "nativeEvent": "PostToolUse" },
+  "session": { "id": "abc123", "projectDir": "C:/dev/pedidos", "cwd": "C:/dev/pedidos", "agent": { "id": "ag-1", "type": "harness-implementer" } },
+  "tool": { "kind": "write", "name": "Edit", "paths": ["src/pedidos/api.py"], "succeeded": true }
+}

@@ -1,0 +1,18 @@
+{
+  "schema": 0,
+  "generatedAt": "2026-10-30T14:00:00Z",
+  "harnessVersion": "0.0.0",
+  "project": { "kind": "brownfield", "aiLevel": "N1",
+               "git": { "present": true, "commits": 812, "remote": "git@github.com:acme/loja.git", "host": "github" } },
+  "stacks": [ { "ecosystem": "js-ts", "manifest": "package.json", "path": ".", "packageManager": "pnpm", "testFrameworks": ["vitest"] } ],
+  "commands": [
+    { "name": "test.unit", "run": "pnpm vitest run", "origin": "ci", "source": ".github/workflows/ci.yml:31" },
+    { "name": "lint", "run": "pnpm lint", "origin": "manifest", "source": "package.json:9" }
+  ],
+  "aiFiles": [ { "category": "instructions", "path": "CLAUDE.md", "tool": "claude-code", "lines": 212 } ],
+  "sensors": { "tests": "unknown", "junit": false, "lint": "unknown", "typecheck": "unknown", "ci": true, "dev": false },
+  "runtimes": [ { "name": "node", "version": "22.11.0" }, { "name": "python3", "version": "3.12.3" } ],
+  "tools": [ { "name": "claude-code", "via": "both", "version": "2.1.300" } ],
+  "agents": { "provider": "anthropic-api", "envOverrides": [], "existing": [] },
+  "conflicts": []
+}

@@ -1,0 +1,3 @@
+{ "id": "next-app", "ecosystem": "js-ts", "when": { "stack": { "language": "typescript" } },
+  "generate": { "run": "pnpm create next-app {name}", "interactive": true, "network": true },
+  "addons": [], "source": "https://nextjs.org/docs", "testedVersion": "15" }

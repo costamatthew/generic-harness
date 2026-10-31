@@ -1,0 +1,1 @@
+{ "contract": "hook/v0", "hook": "stop_gate", "decision": "block" }

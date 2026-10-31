@@ -1,0 +1,6 @@
+{
+  "schema": 0,
+  "project": { "name": "x", "kind": "brownfield" },
+  "commands": {},
+  "boundaries": { "always": [], "ask": [ { "rule": "deps", "match": ["regex:^npm i"] } ], "never": [] }
+}

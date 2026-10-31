@@ -1,0 +1,8 @@
+{
+  "schema": 0, "runId": "20261030T141500Z-a1b2c3", "attempt": 1, "taskId": "T1",
+  "startedAt": "2026-10-30T14:15:00Z", "finishedAt": "2026-10-30T14:15:12Z", "result": "sensor-absent",
+  "inputs": { "revision": null, "dirty": true, "tree": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "treeAlgorithm": "sha256-worktree-v0", "treeExcludes": [],
+              "profileSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "harnessVersion": "0.0.0" },
+  "environment": { "os": "linux", "python": "3.12.3" },
+  "checks": [ { "name": "test.unit", "status": "absent" } ]
+}

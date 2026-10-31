@@ -1,0 +1,2 @@
+{ "schema": 0, "features": [ { "id": "FEAT-001", "title": "x", "priority": "P1", "status": "in-progress",
+  "acceptance": ["WHEN a THEN b SHALL c"], "spec": null } ] }

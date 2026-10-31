@@ -1,0 +1,6 @@
+{
+  "schema": 0,
+  "project": { "name": "x", "kind": "brownfield" },
+  "commands": { "test": { "int": { "run": "pytest tests/int", "parallelSafe": false, "origin": "ci", "status": "confirmed" } } },
+  "boundaries": { "always": [], "ask": [], "never": [] }
+}

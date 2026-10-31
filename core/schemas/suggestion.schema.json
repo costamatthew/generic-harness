@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/suggestion/v0",
+  "title": "Sugestão v0",
+  "description": "Uma entrada de core/catalog/suggestions/*.json (BF §10.1). O harness nunca instala uma sugestão: ele a lista em reports/suggestions.md e a pessoa aceita item por item.",
+  "type": "object",
+  "required": ["id", "kind", "when", "answers", "why", "contextCost", "source", "trust"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "kind": { "enum": ["mcp", "skill", "sensor", "doc", "framework"] },
+    "when": {
+      "type": "object",
+      "description": "Sinais do inventário (nomes estáveis, kebab-case).",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "any": { "$ref": "#/$defs/signals" },
+        "all": { "$ref": "#/$defs/signals" },
+        "none": { "$ref": "#/$defs/signals" }
+      }
+    },
+    "answers": { "type": "string", "minLength": 1, "description": "A pergunta que a sugestão responde (cap. 18)." },
+    "why": { "type": "string", "minLength": 1 },
+    "contextCost": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "trust": { "enum": ["oficial", "comunidade", "não auditado"] },
+    "guide": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "signals": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" } }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/scaffolder/v0",
+  "title": "Scaffolder v0",
+  "description": "Uma entrada de core/catalog/scaffolders/*.json (GF §6.2). Gerador oficial do ecossistema, executado com aprovação porque roda código de terceiros e usa rede. `profile` em cada addon diz o que o perfil recebe, sempre com status `planned` até o esqueleto rodar.",
+  "type": "object",
+  "required": ["id", "ecosystem", "when", "generate", "addons", "source", "testedVersion"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "ecosystem": { "enum": ["js-ts", "python", "go", "rust", "jvm", "dotnet", "dart", "ruby", "php", "elixir", "swift", "c-cpp"] },
+    "when": {
+      "type": "object",
+      "description": "Casamento com as decisões de fundação: chave = ADR lógico (ex.: stack), valor = campos exigidos do bloco `profile` do ADR.",
+      "minProperties": 1,
+      "additionalProperties": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "string" } }
+    },
+    "generate": { "$ref": "#/$defs/step" },
+    "addons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["for", "run", "profile"],
+        "additionalProperties": false,
+        "properties": {
+          "for": { "enum": ["test", "lint", "format", "typecheck", "build", "e2e"] },
+          "run": { "type": "string", "minLength": 1 },
+          "network": { "type": "boolean" },
+          "profile": {
+            "type": "object",
+            "minProperties": 1,
+            "propertyNames": { "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*){0,2}$" },
+            "additionalProperties": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "removeAfter": { "type": "array", "items": { "type": "string" }, "description": "Exemplos de demonstração do gerador que a task do esqueleto remove (GF §6.2)." },
+    "ciTemplate": { "type": "string", "description": "Caminho em core/templates/ci/." },
+    "source": { "type": "string", "pattern": "^https://" },
+    "testedVersion": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "step": {
+      "type": "object",
+      "required": ["run", "interactive", "network"],
+      "additionalProperties": false,
+      "properties": {
+        "run": { "type": "string", "minLength": 1, "description": "Pode usar {name}." },
+        "interactive": { "const": false, "description": "Só geradores com modo não interativo entram no catálogo." },
+        "network": { "type": "boolean" }
+      }
+    }
+  }
+}

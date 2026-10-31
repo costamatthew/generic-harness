@@ -1,0 +1,2 @@
+{ "session_id": "abc123", "transcript_path": "/home/dev/.claude/projects/p/abc123.jsonl", "cwd": "/home/dev/pedidos",
+  "permission_mode": "default", "hook_event_name": "SessionStart", "source": "compact", "model": "claude-sonnet-5-5" }

@@ -1,0 +1,3 @@
+{ "contract": "hook/v0", "event": "pre_compact", "source": { "tool": "claude-code", "nativeEvent": "PreCompact" },
+  "session": { "id": "abc123", "projectDir": "/home/dev/pedidos", "cwd": "/home/dev/pedidos" },
+  "compact": { "trigger": "auto" } }

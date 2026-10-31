@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/hook-event/v0",
+  "title": "Evento de hook neutro v0",
+  "description": "Entrada normalizada de um hook do núcleo (HG §1.4, §4.1). O adaptador lê o JSON nativo da ferramenta, produz este objeto e o entrega ao hook do núcleo. O hook do núcleo nunca lê o formato nativo. Ver docs/contracts/hooks.md.",
+  "type": "object",
+  "required": ["contract", "event", "source", "session"],
+  "additionalProperties": false,
+  "properties": {
+    "contract": { "const": "hook/v0" },
+    "event": { "enum": ["pre_tool", "post_edit", "stop", "session_start", "pre_compact"] },
+    "source": {
+      "type": "object",
+      "required": ["tool"],
+      "additionalProperties": false,
+      "properties": {
+        "tool": { "enum": ["claude-code", "cursor", "codex", "test"] },
+        "version": { "type": "string" },
+        "nativeEvent": { "type": "string", "description": "Nome do evento na ferramenta, ex.: PreToolUse." }
+      }
+    },
+    "session": {
+      "type": "object",
+      "required": ["id", "projectDir", "cwd"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "projectDir": { "type": "string", "minLength": 1, "description": "Raiz do hospedeiro (CLAUDE_PROJECT_DIR no Claude Code)." },
+        "cwd": { "type": "string", "minLength": 1 },
+        "agent": {
+          "type": "object",
+          "description": "Presente quando o evento vem de um sub-agent.",
+          "required": ["type"],
+          "additionalProperties": false,
+          "properties": {
+            "id": { "type": "string" },
+            "type": { "type": "string" }
+          }
+        }
+      }
+    },
+    "tool": {
+      "type": "object",
+      "description": "Chamada de ferramenta, para pre_tool e post_edit. `kind` é o que os matchers neutros usam: shell casa com `shell:<glob>`, write casa com `write:<glob>`.",
+      "required": ["kind", "name"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["shell", "write", "read", "other"] },
+        "name": { "type": "string", "minLength": 1, "description": "Nome nativo, ex.: Bash, Edit." },
+        "command": { "type": "string" },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Caminhos relativos a projectDir, com '/' como separador (o adaptador normaliza '\\' do Windows)."
+        },
+        "succeeded": { "type": "boolean", "description": "Só em post_edit." }
+      },
+      "allOf": [
+        { "if": { "properties": { "kind": { "const": "shell" } } }, "then": { "required": ["command"] } },
+        { "if": { "properties": { "kind": { "const": "write" } } }, "then": { "required": ["paths"] } }
+      ]
+    },
+    "stop": {
+      "type": "object",
+      "required": ["reentry"],
+      "additionalProperties": false,
+      "properties": {
+        "reentry": { "type": "boolean", "description": "A ferramenta já está continuando por causa de um bloqueio anterior (stop_hook_active no Claude Code)." },
+        "lastMessage": { "type": "string" }
+      }
+    },
+    "sessionStart": {
+      "type": "object",
+      "required": ["reason"],
+      "additionalProperties": false,
+      "properties": {
+        "reason": { "enum": ["startup", "resume", "clear", "compact", "fork", "other"] }
+      }
+    },
+    "compact": {
+      "type": "object",
+      "required": ["trigger"],
+      "additionalProperties": false,
+      "properties": {
+        "trigger": { "enum": ["manual", "auto"] }
+      }
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "event": { "enum": ["pre_tool", "post_edit"] } } }, "then": { "required": ["tool"] } },
+    { "if": { "properties": { "event": { "const": "stop" } } }, "then": { "required": ["stop"] } },
+    { "if": { "properties": { "event": { "const": "session_start" } } }, "then": { "required": ["sessionStart"] } },
+    { "if": { "properties": { "event": { "const": "pre_compact" } } }, "then": { "required": ["compact"] } }
+  ]
+}

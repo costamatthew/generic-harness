@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/inventory/v0",
+  "title": "inventory.json v0",
+  "description": "Fatos detectados por `harness detect` (BF §4, §5, §16.8; GF §3). Regenerável e somente leitura no hospedeiro. Nada aqui é decisão: decisões vão para profile.json.",
+  "type": "object",
+  "required": ["schema", "generatedAt", "harnessVersion", "project", "stacks", "commands", "aiFiles", "sensors"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": 0 },
+    "generatedAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T" },
+    "harnessVersion": { "type": "string", "minLength": 1 },
+    "project": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "enum": ["brownfield", "greenfield"] },
+        "class": { "enum": ["G0", "G1", "G2", "G3"] },
+        "aiLevel": { "enum": ["N0", "N1", "N2", "N3", "N4"] },
+        "git": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "present": { "type": "boolean" },
+            "commits": { "type": "integer", "minimum": 0 },
+            "remote": { "type": ["string", "null"] },
+            "host": { "enum": ["github", "gitlab", "bitbucket", "azure", "other", null] }
+          }
+        },
+        "uncertain": { "type": "array", "items": { "type": "string" }, "description": "Classificações que viraram pergunta (GF §3.1)." }
+      },
+      "if": { "properties": { "kind": { "const": "greenfield" } } },
+      "then": { "required": ["class"] },
+      "else": { "required": ["aiLevel"] }
+    },
+    "stacks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ecosystem", "manifest"],
+        "additionalProperties": false,
+        "properties": {
+          "ecosystem": { "enum": ["js-ts", "python", "go", "rust", "jvm", "dotnet", "dart", "ruby", "php", "elixir", "swift", "c-cpp", "other"] },
+          "manifest": { "type": "string", "minLength": 1 },
+          "path": { "type": "string" },
+          "packageManager": { "type": "string" },
+          "testFrameworks": { "type": "array", "items": { "type": "string" } },
+          "workspace": { "type": "boolean" }
+        }
+      }
+    },
+    "commands": {
+      "type": "array",
+      "description": "Comandos candidatos, com a fonte (BF §5.1).",
+      "items": {
+        "type": "object",
+        "required": ["name", "run", "origin", "source"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)?$" },
+          "run": { "type": "string", "minLength": 1 },
+          "origin": { "enum": ["ci", "task-runner", "manifest", "docs", "preset"] },
+          "source": { "type": "string", "minLength": 1, "description": "arquivo:linha" }
+        }
+      }
+    },
+    "aiFiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["category", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "category": { "enum": ["instructions", "skills", "commands", "agents", "hooks", "permissions", "mcp", "spec-framework", "ci-agent", "context-docs"] },
+          "path": { "type": "string", "minLength": 1 },
+          "tool": { "type": "string" },
+          "lines": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "sensors": {
+      "type": "object",
+      "description": "Sensores disponíveis (BF §4.3). 'unknown' quando o comando ainda não foi aprovado para rodar (D19).",
+      "required": ["tests", "junit", "lint", "typecheck", "ci", "dev"],
+      "additionalProperties": false,
+      "properties": {
+        "tests": { "$ref": "#/$defs/tri" },
+        "junit": { "$ref": "#/$defs/tri" },
+        "lint": { "$ref": "#/$defs/tri" },
+        "typecheck": { "$ref": "#/$defs/tri" },
+        "ci": { "$ref": "#/$defs/tri" },
+        "dev": { "$ref": "#/$defs/tri" }
+      }
+    },
+    "runtimes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "version": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "tools": {
+      "type": "array",
+      "description": "Ferramentas de IA presentes (BF §16.8).",
+      "items": {
+        "type": "object",
+        "required": ["name", "via"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "enum": ["claude-code", "cursor", "codex", "copilot", "other"] },
+          "via": { "enum": ["config", "path", "both"] },
+          "version": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "agents": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "type": ["string", "null"] },
+        "envOverrides": { "type": "array", "items": { "type": "string" }, "description": "Variáveis presentes que mudam o roster, ex.: CLAUDE_CODE_SUBAGENT_MODEL_FORCE." },
+        "existing": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["tool", "name", "path"],
+            "additionalProperties": false,
+            "properties": {
+              "tool": { "type": "string" },
+              "name": { "type": "string" },
+              "path": { "type": "string" },
+              "model": { "type": ["string", "null"] },
+              "tools": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "description": "Conflito vira pergunta, não decisão (BF §4.2).",
+      "items": {
+        "type": "object",
+        "required": ["kind", "files", "detail"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": { "enum": ["instructions-disagree", "hooks-overlap", "deny-blocks-gate", "name-collision", "other"] },
+          "files": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "detail": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "tri": { "enum": [true, false, "unknown"] }
+  }
+}

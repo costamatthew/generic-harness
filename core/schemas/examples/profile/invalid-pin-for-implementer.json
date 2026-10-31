@@ -1,0 +1,8 @@
+{
+  "schema": 0,
+  "project": { "name": "x", "kind": "brownfield" },
+  "commands": {},
+  "boundaries": { "always": [], "ask": [], "never": [] },
+  "models": { "tiers": { "fast": {"claude-code": "haiku"}, "standard": {"claude-code": "sonnet"}, "strong": {"claude-code": "opus"} },
+              "pins": { "implementer": "claude-sonnet-5-5" } }
+}

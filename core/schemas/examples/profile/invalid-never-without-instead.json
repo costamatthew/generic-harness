@@ -1,0 +1,6 @@
+{
+  "schema": 0,
+  "project": { "name": "x", "kind": "brownfield" },
+  "commands": { "test": { "unit": { "run": "pytest", "origin": "manifest", "status": "detected" } } },
+  "boundaries": { "always": [], "ask": [], "never": [ { "rule": "push na main", "match": ["shell:git push * main"] } ] }
+}

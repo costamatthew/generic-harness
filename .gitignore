@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+reports/
+# estado de execução quando o harness roda neste repo (dogfooding a partir da Etapa 2)
+.harness/runs/

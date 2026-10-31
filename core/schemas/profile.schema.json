@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/profile/v0",
+  "title": "profile.json v0",
+  "description": "Contrato do projeto hospedeiro (HG §3.1; BF §5.1, §15.8, §16.7; GF §4.1, §7.3). Fatos detectados ficam em inventory.json; aqui ficam as decisões, cada uma com origem e status. Escrito pelo CLI ou pela pessoa; nunca pelo agente (ADR-0003).",
+  "type": "object",
+  "required": ["schema", "project", "commands", "boundaries"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": 0 },
+    "project": {
+      "type": "object",
+      "required": ["name", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["brownfield", "greenfield"] },
+        "class": { "enum": ["G0", "G1", "G2", "G3"], "description": "Classe greenfield (GF §3.1)." },
+        "aiLevel": { "enum": ["N0", "N1", "N2", "N3", "N4"], "description": "Maturidade de IA no bootstrap (BF §4.2)." },
+        "genesis": {
+          "type": "object",
+          "required": ["step"],
+          "additionalProperties": false,
+          "properties": {
+            "step": { "enum": ["brief", "decisions", "skeleton", "first-slice", "features", "exited"] },
+            "exitCriteria": { "type": "string" }
+          }
+        }
+      },
+      "if": { "properties": { "kind": { "const": "greenfield" } } },
+      "then": { "required": ["class"] }
+    },
+    "commands": {
+      "type": "object",
+      "description": "Comandos reais do projeto. `test` é um mapa de suítes; os demais nomes são comandos simples.",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "properties": {
+        "test": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+          "additionalProperties": { "$ref": "#/$defs/testCommand" }
+        }
+      },
+      "additionalProperties": { "$ref": "#/$defs/command" }
+    },
+    "tests": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "globs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "skipMarkers": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "boundaries": {
+      "type": "object",
+      "required": ["always", "ask", "never"],
+      "additionalProperties": false,
+      "properties": {
+        "always": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "ask": { "type": "array", "items": { "$ref": "#/$defs/askRule" } },
+        "never": { "type": "array", "items": { "$ref": "#/$defs/neverRule" } }
+      }
+    },
+    "docs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["when", "read"],
+        "additionalProperties": false,
+        "properties": {
+          "when": { "type": "string", "minLength": 1 },
+          "read": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "description": "Camada de spec escolhida (BF §15.5, §15.8; D3/D24).",
+      "required": ["framework", "idPattern"],
+      "additionalProperties": false,
+      "properties": {
+        "framework": { "enum": ["native", "openspec", "tlc", "spec-kit"] },
+        "version": { "type": "string" },
+        "taskSource": { "type": "string" },
+        "criteriaSource": { "type": "string" },
+        "validator": { "type": "string" },
+        "idPattern": { "type": "string", "minLength": 1 },
+        "decision": { "$ref": "#/$defs/adrRef" }
+      }
+    },
+    "models": {
+      "type": "object",
+      "required": ["tiers"],
+      "additionalProperties": false,
+      "properties": {
+        "provider": { "$ref": "#/$defs/trackedString" },
+        "tiers": {
+          "type": "object",
+          "required": ["fast", "standard", "strong"],
+          "propertyNames": { "$ref": "#/$defs/tier" },
+          "additionalProperties": {
+            "type": "object",
+            "propertyNames": { "pattern": "^(claude-code|cursor|codex|enabled)$" },
+            "properties": { "enabled": { "type": "boolean" } },
+            "additionalProperties": { "type": "string", "minLength": 1 }
+          }
+        },
+        "pins": {
+          "type": "object",
+          "description": "Papel → ID completo de modelo. Só verifier e judge (D31).",
+          "propertyNames": { "enum": ["verifier", "judge"] },
+          "additionalProperties": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*-\\d" }
+        }
+      }
+    },
+    "roles": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/roleName" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["tier"],
+        "additionalProperties": false,
+        "properties": {
+          "tier": { "$ref": "#/$defs/tier" },
+          "effort": { "enum": ["low", "medium", "high", "xhigh", "max"] },
+          "pinned": { "type": "boolean" },
+          "readonly": { "type": "boolean" },
+          "parallel": { "type": "boolean" },
+          "fallbackTier": { "$ref": "#/$defs/tier" },
+          "adopt": { "type": "string", "description": "Sub-agent do time adotado para o papel (BF §16.8), ex.: .claude/agents/code-reviewer.md" }
+        }
+      }
+    },
+    "exemplars": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "path", "since"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "path": { "type": "string", "minLength": 1 },
+          "since": { "type": "string", "pattern": "^[A-Z][A-Z0-9]*-\\d+$" }
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "description": "Componentes desligáveis (HG §3.1, P11).",
+      "propertyNames": { "enum": ["stopGate", "testGuard", "boundaryGuard", "postEdit", "sessionStart", "preCompact", "reviewLoop", "verifier"] },
+      "additionalProperties": { "type": "boolean" }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxFixIterations": { "type": "integer", "minimum": 1 },
+        "maxWorkers": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "maxReaders": { "type": "integer", "minimum": 1 },
+        "maxDepth": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "contextTarget": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+        "stopReentries": { "type": "integer", "minimum": 1, "description": "Limite de reentradas do Stop gate (S4) antes de exigir blocker registrado." },
+        "summaryLines": { "type": "integer", "minimum": 3, "maximum": 40, "description": "Teto da saída enxuta do CLI (HG §3.5)." }
+      }
+    }
+  },
+  "$defs": {
+    "origin": {
+      "type": "string",
+      "description": "De onde veio o valor (BF §5.1; GF §4.1).",
+      "pattern": "^(ci|task-runner|manifest|docs|preset|env|human|decision:ADR-\\d{4})$"
+    },
+    "status": {
+      "description": "detected → confirmed → verified (brownfield); planned → verified (greenfield). Só `verified` pode alimentar um gate (GF §4.2).",
+      "enum": ["detected", "confirmed", "planned", "verified"]
+    },
+    "adrRef": { "type": "string", "pattern": "^ADR-\\d{4}$" },
+    "tier": { "enum": ["fast", "standard", "strong", "frontier"] },
+    "roleName": {
+      "enum": ["explorer", "researcher", "synthesizer", "auditor", "planner", "implementer", "mechanical", "verifier", "reviewer", "security", "consolidator", "doc-writer", "retro", "triager", "judge", "test-author"]
+    },
+    "trackedString": {
+      "type": "object",
+      "required": ["value", "origin", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "value": { "type": "string", "minLength": 1 },
+        "origin": { "$ref": "#/$defs/origin" },
+        "status": { "$ref": "#/$defs/status" }
+      }
+    },
+    "command": {
+      "type": "object",
+      "required": ["run", "origin", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "run": { "type": "string", "minLength": 1 },
+        "fix": { "type": "string", "minLength": 1 },
+        "ready": { "type": "string", "minLength": 1, "description": "URL ou comando que confirma que `dev` subiu." },
+        "cwd": { "type": "string" },
+        "timeoutSec": { "type": "integer", "minimum": 1 },
+        "origin": { "$ref": "#/$defs/origin" },
+        "status": { "$ref": "#/$defs/status" },
+        "source": { "type": "string", "description": "arquivo:linha onde o comando foi encontrado." },
+        "verifiedAt": { "type": "string" }
+      }
+    },
+    "testCommand": {
+      "type": "object",
+      "required": ["run", "origin", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "run": { "type": "string", "minLength": 1 },
+        "report": { "type": "string", "minLength": 1, "description": "Caminho do JUnit XML que o comando produz." },
+        "reportFormat": { "enum": ["junit", "none"] },
+        "parallelSafe": { "type": "boolean" },
+        "why": { "type": "string" },
+        "requires": { "type": "array", "items": { "type": "string" } },
+        "cwd": { "type": "string" },
+        "timeoutSec": { "type": "integer", "minimum": 1 },
+        "origin": { "$ref": "#/$defs/origin" },
+        "status": { "$ref": "#/$defs/status" },
+        "source": { "type": "string" },
+        "verifiedAt": { "type": "string" }
+      },
+      "if": { "properties": { "parallelSafe": { "const": false } }, "required": ["parallelSafe"] },
+      "then": { "required": ["why"] }
+    },
+    "matcher": {
+      "type": "string",
+      "description": "Matcher neutro (D6): shell:<glob> casa com o texto do comando; write:<glob> casa com o caminho relativo à raiz.",
+      "pattern": "^(shell|write):\\S.*$"
+    },
+    "askRule": {
+      "type": "object",
+      "required": ["rule", "match"],
+      "additionalProperties": false,
+      "properties": {
+        "rule": { "type": "string", "minLength": 1 },
+        "match": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/matcher" } },
+        "instead": { "type": "string", "minLength": 1 }
+      }
+    },
+    "neverRule": {
+      "type": "object",
+      "description": "Cada 'never' tem um 'instead' (cap. 4; P15).",
+      "required": ["rule", "match", "instead"],
+      "additionalProperties": false,
+      "properties": {
+        "rule": { "type": "string", "minLength": 1 },
+        "match": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/matcher" } },
+        "instead": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

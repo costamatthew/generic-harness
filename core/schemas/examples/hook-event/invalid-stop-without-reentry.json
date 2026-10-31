@@ -1,0 +1,2 @@
+{ "contract": "hook/v0", "event": "stop", "source": { "tool": "claude-code" },
+  "session": { "id": "abc123", "projectDir": "/p", "cwd": "/p" } }

@@ -1,0 +1,6 @@
+{
+  "contract": "hook/v0", "event": "pre_tool",
+  "source": { "tool": "claude-code", "nativeEvent": "PreToolUse" },
+  "session": { "id": "abc123", "projectDir": "/home/dev/pedidos", "cwd": "/home/dev/pedidos" },
+  "tool": { "kind": "shell", "name": "Bash", "command": "git push origin main" }
+}

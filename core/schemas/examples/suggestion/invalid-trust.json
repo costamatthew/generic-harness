@@ -1,0 +1,2 @@
+{ "id": "skill-x", "kind": "skill", "when": { "any": ["x"] }, "answers": "?", "why": "?", "contextCost": "?",
+  "source": "https://skills.sh/x", "trust": "confiável" }

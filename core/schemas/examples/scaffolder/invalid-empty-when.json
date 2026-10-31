@@ -1,0 +1,3 @@
+{ "id": "go-mod", "ecosystem": "go", "when": {},
+  "generate": { "run": "go mod init {name}", "interactive": false, "network": false },
+  "addons": [], "source": "https://go.dev/doc/", "testedVersion": "1.23" }

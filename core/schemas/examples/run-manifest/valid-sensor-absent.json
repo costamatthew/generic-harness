@@ -1,0 +1,8 @@
+{
+  "schema": 0, "runId": "20261030T090000Z-00aa11", "attempt": 1, "taskId": "T2",
+  "startedAt": "2026-10-30T09:00:00Z", "finishedAt": "2026-10-30T09:00:00Z", "result": "sensor-absent",
+  "inputs": { "revision": null, "dirty": true, "tree": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "treeAlgorithm": "sha256-worktree-v0", "treeExcludes": [".harness/runs/**"],
+              "profileSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "harnessVersion": "0.0.0" },
+  "environment": { "os": "windows", "python": "3.10.11" },
+  "checks": [ { "name": "test.unit", "status": "absent", "absent": { "reason": "planned", "decidedBy": "ADR-0003", "createdBy": "GEN-001" } } ]
+}

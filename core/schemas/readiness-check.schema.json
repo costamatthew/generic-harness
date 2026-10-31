@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/readiness-check/v0",
+  "title": "Check de prontidão v0",
+  "description": "Uma entrada de core/catalog/readiness/*.json (BF §15.2, 'Formato do check'; GF §9.4). Só checks computacionais decidem o nível (D23). `check` nomeia a função determinística que avalia; inferenciais nomeiam o papel que gera o achado.",
+  "type": "object",
+  "required": ["id", "level", "kind", "scope", "check", "guide", "evidence"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^R\\d{2}$" },
+    "level": { "enum": ["P0", "P1", "P2", "P3", "P4", "info"] },
+    "kind": { "enum": ["computational", "inferential", "mixed"] },
+    "scope": { "enum": ["repo", "app"], "description": "app = avaliado por pacote em monorepos (BF §5.3)." },
+    "check": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "title": { "type": "string" },
+    "guide": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^(cap\\. \\d+|Ap\\. [A-Z]|BF §|GF §|HG §|\\[Externo\\])" } },
+    "evidence": { "type": "string", "minLength": 1, "description": "O que o relatório mostra para provar o resultado." },
+    "appliesWhen": { "type": "string", "description": "Condição sobre o inventário; quando falsa, o check é pulado e declarado (não aplicável)." },
+    "role": { "type": "string", "description": "Papel que responde a parte inferencial (ex.: auditor)." },
+    "fix": {
+      "type": "object",
+      "required": ["recipe", "size"],
+      "additionalProperties": false,
+      "properties": {
+        "recipe": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "size": { "enum": ["quick", "medium", "large"] }
+      }
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "kind": { "enum": ["inferential", "mixed"] } } }, "then": { "required": ["role"] } }
+  ]
+}

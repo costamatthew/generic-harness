@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/intake/v0",
+  "title": "Item de intake v0",
+  "description": "Forma estruturada de .harness/intake/<ID>.md (BF §6.3), produzida por core/lib/intake.py a partir do Markdown. O arquivo é Markdown para a pessoa; este schema é o que os scripts conferem.",
+  "type": "object",
+  "required": ["id", "title", "origin", "owner", "priority", "problem", "outOfScope", "sources", "openQuestions"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9]*-\\d+$" },
+    "title": { "type": "string", "minLength": 1 },
+    "origin": { "type": "string", "minLength": 1, "description": "issue, board ou pedido" },
+    "owner": { "type": "string", "minLength": 1 },
+    "priority": { "enum": ["P1", "P2", "P3"] },
+    "problem": { "type": "string", "minLength": 1 },
+    "outOfScope": { "type": "string", "minLength": 1 },
+    "sources": { "type": "string", "minLength": 1 },
+    "openQuestions": { "type": "string", "minLength": 1, "description": "Decisões que a IA não deve tomar. 'nenhuma' é um valor válido; vazio não." },
+    "size": { "enum": ["quick", "medium", "large"], "description": "Proposto pelo triager (BF §16.5)." },
+    "recipe": { "type": "string", "description": "fix.recipe do check de prontidão que gerou o item (READY-NNN)." }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/features/v0",
+  "title": "features.json v0",
+  "description": "Backlog de features com status (GF §7.1). A pessoa edita título, critérios e prioridade; só `harness feature` muda `status` (ADR-0003).",
+  "type": "object",
+  "required": ["schema", "features"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": 0 },
+    "mirror": {
+      "type": "object",
+      "description": "Presente quando o backlog espelha um board externo.",
+      "required": ["source"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "enum": ["jira", "linear", "github-issues", "gitlab-issues", "other"] },
+        "syncedAt": { "type": "string" }
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "priority", "status", "acceptance"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9]*-\\d+$" },
+          "title": { "type": "string", "minLength": 1 },
+          "epic": { "type": "string" },
+          "priority": { "enum": ["P1", "P2", "P3"] },
+          "dependsOn": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9]*-\\d+$" } },
+          "status": { "enum": ["todo", "in-spec", "in-progress", "done", "blocked"] },
+          "acceptance": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "pattern": "WHEN .+ THEN .+ SHALL .+" }
+          },
+          "spec": { "type": ["string", "null"], "description": "Caminho da spec; null até a feature entrar em spec (just-in-time)." },
+          "evidence": { "type": "string", "description": "Manifesto do run que encerrou a feature." }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "status": { "enum": ["in-progress", "done"] } } },
+            "then": { "properties": { "spec": { "type": "string" } }, "required": ["spec"] }
+          },
+          {
+            "if": { "properties": { "status": { "const": "done" } } },
+            "then": { "required": ["evidence"] }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "schema": 0,
+  "project": { "name": "pedidos-api", "kind": "brownfield", "aiLevel": "N0" },
+  "commands": {
+    "install":   { "run": "uv sync", "origin": "ci", "status": "verified", "source": ".github/workflows/ci.yml:18" },
+    "lint":      { "run": "uv run ruff check .", "fix": "uv run ruff check --fix .", "origin": "task-runner", "status": "confirmed", "source": "Makefile:4" },
+    "typecheck": { "run": "uv run mypy src", "origin": "task-runner", "status": "verified" },
+    "dev":       { "run": "uv run uvicorn app.main:app", "ready": "http://localhost:8000/health", "origin": "docs", "status": "detected" },
+    "test": {
+      "unit": { "run": "uv run pytest tests/unit --junitxml=.harness/runs/unit.xml", "report": ".harness/runs/unit.xml",
+                "reportFormat": "junit", "parallelSafe": true, "origin": "ci", "status": "verified" },
+      "integration": { "run": "uv run pytest tests/int --junitxml=.harness/runs/int.xml", "report": ".harness/runs/int.xml",
+                       "parallelSafe": false, "why": "banco compartilhado, sem testcontainers", "origin": "ci", "status": "confirmed" }
+    }
+  },
+  "tests": { "globs": ["tests/**/test_*.py"], "skipMarkers": ["@pytest.mark.skip", "pytest.skip(", "@pytest.mark.xfail"] },
+  "boundaries": {
+    "always": ["rodar os testes antes do PR", "dar stage só no que foi pedido"],
+    "ask": [ { "rule": "adicionar dependências", "match": ["shell:uv add *", "shell:pip install *"] } ],
+    "never": [
+      { "rule": "push direto na main", "match": ["shell:git push * main*"], "instead": "abra um PR" },
+      { "rule": "editar migrations à mão", "match": ["write:migrations/**"], "instead": "gere com uv run alembic revision --autogenerate" }
+    ]
+  },
+  "docs": [ { "when": "escrevendo testes de integração", "read": "docs/agents/testing.md" } ],
+  "spec": { "framework": "native", "idPattern": "^[A-Z]+-\\d+$", "decision": "ADR-0001" },
+  "models": {
+    "provider": { "value": "anthropic-api", "origin": "env", "status": "confirmed" },
+    "tiers": {
+      "fast":     { "claude-code": "haiku" },
+      "standard": { "claude-code": "sonnet" },
+      "strong":   { "claude-code": "opus" },
+      "frontier": { "claude-code": "fable", "enabled": false }
+    },
+    "pins": { "verifier": "claude-opus-5-5" }
+  },
+  "roles": {
+    "explorer":    { "tier": "fast", "effort": "low", "readonly": true, "parallel": true },
+    "implementer": { "tier": "standard", "effort": "medium", "fallbackTier": "strong" },
+    "verifier":    { "tier": "strong", "effort": "high", "pinned": true, "readonly": true }
+  },
+  "components": { "stopGate": true, "testGuard": false, "boundaryGuard": true, "reviewLoop": false },
+  "limits": { "maxFixIterations": 3, "maxWorkers": 3, "maxReaders": 6, "maxDepth": 2, "contextTarget": 0.4, "stopReentries": 3, "summaryLines": 10 }
+}

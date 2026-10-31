@@ -1,0 +1,1 @@
+{ "contract": "hook/v0", "hook": "boundary_guard", "decision": "allow" }

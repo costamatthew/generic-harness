@@ -1,0 +1,6 @@
+{
+  "schema": 0, "generatedAt": "2026-10-30T14:00:00Z", "harnessVersion": "0.0.0",
+  "project": { "kind": "brownfield" },
+  "stacks": [], "commands": [], "aiFiles": [],
+  "sensors": { "tests": true, "junit": true, "lint": true, "typecheck": true, "ci": true, "dev": true }
+}

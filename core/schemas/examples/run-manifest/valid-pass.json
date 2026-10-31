@@ -1,0 +1,27 @@
+{
+  "schema": 0,
+  "runId": "20261030T141500Z-a1b2c3",
+  "attempt": 2,
+  "taskId": "T1",
+  "workId": "PAG-12",
+  "requirements": ["PAG-03"],
+  "mode": "gate",
+  "startedAt": "2026-10-30T14:15:00Z",
+  "finishedAt": "2026-10-30T14:15:12.4Z",
+  "result": "pass",
+  "inputs": {
+    "revision": "cccccccccccccccccccccccccccccccccccccccc", "dirty": true, "tree": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "treeAlgorithm": "sha256-worktree-v0",
+    "treeExcludes": [".harness/runs/**", ".harness/work/*/validation.md", ".harness/work/*/tasks.json", ".harness/STATE.md"],
+    "profileSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "harnessVersion": "0.0.0", "adapter": "claude-code"
+  },
+  "environment": { "os": "linux", "python": "3.12.3", "ci": false },
+  "checks": [
+    { "name": "lint", "status": "pass", "run": "uv run ruff check .", "exitCode": 0,
+      "startedAt": "2026-10-30T14:15:00Z", "finishedAt": "2026-10-30T14:15:01Z", "durationMs": 900,
+      "log": { "path": ".harness/runs/20261030T141500Z-a1b2c3/lint.log", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" } },
+    { "name": "test.unit", "status": "pass", "run": "uv run pytest tests/unit --junitxml=.harness/runs/unit.xml", "exitCode": 0, "durationMs": 11200,
+      "log": { "path": ".harness/runs/20261030T141500Z-a1b2c3/test.unit.log", "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+      "report": { "path": ".harness/runs/unit.xml", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "mtimeAfterStart": true, "tests": 43, "failures": 0, "errors": 0, "skipped": 0 } }
+  ],
+  "supersedes": "20261030T140200Z-0f0f0f"
+}

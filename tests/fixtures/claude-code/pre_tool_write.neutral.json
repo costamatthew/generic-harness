@@ -1,0 +1,3 @@
+{ "contract": "hook/v0", "event": "pre_tool", "source": { "tool": "claude-code", "nativeEvent": "PreToolUse" },
+  "session": { "id": "abc123", "projectDir": "/home/dev/pedidos", "cwd": "/home/dev/pedidos/src" },
+  "tool": { "kind": "write", "name": "Write", "paths": [".harness/work/PAG-12/tasks.json"] } }

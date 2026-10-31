@@ -1,0 +1,8 @@
+{
+  "schema": 0,
+  "generatedAt": "2026-10-30T14:00:00Z",
+  "harnessVersion": "0.0.0",
+  "project": { "kind": "greenfield", "class": "G0", "git": { "present": true, "commits": 0, "remote": null, "host": null } },
+  "stacks": [], "commands": [], "aiFiles": [],
+  "sensors": { "tests": false, "junit": false, "lint": false, "typecheck": false, "ci": false, "dev": false }
+}

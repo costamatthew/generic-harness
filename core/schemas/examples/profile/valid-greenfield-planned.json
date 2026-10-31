@@ -1,0 +1,15 @@
+{
+  "schema": 0,
+  "project": { "name": "pedidos", "kind": "greenfield", "class": "G0",
+               "genesis": { "step": "skeleton", "exitCriteria": "GF §8.1" } },
+  "commands": {
+    "install":   { "run": "uv sync", "origin": "decision:ADR-0002", "status": "planned" },
+    "lint":      { "run": "uv run ruff check .", "origin": "decision:ADR-0004", "status": "planned" },
+    "test": {
+      "unit": { "run": "uv run pytest --junitxml=.harness/runs/unit.xml", "report": ".harness/runs/unit.xml",
+                "origin": "decision:ADR-0003", "status": "planned" }
+    }
+  },
+  "boundaries": { "always": [], "ask": [], "never": [] },
+  "exemplars": [ { "kind": "unit-test", "path": "tests/test_criar_pedido.py", "since": "FEAT-001" } ]
+}

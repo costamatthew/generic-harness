@@ -1,0 +1,2 @@
+{ "contract": "hook/v0", "hook": "boundary_guard", "decision": "block",
+  "message": { "what": "push direto na main", "why": "boundary never" } }

@@ -1,0 +1,15 @@
+{
+  "schema": 0,
+  "source": { "url": "https://github.com/costamatthew/generic-harness", "ref": "v0.1.0", "commit": "cccccccccccccccccccccccccccccccccccccccc" },
+  "harnessVersion": "0.1.0",
+  "installedAt": "2026-11-02T10:00:00Z",
+  "tools": ["claude-code"],
+  "files": [
+    { "path": ".harness/bin/harness", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "from": "core/cli/harness.py", "mode": "copy" },
+    { "path": ".claude/agents/harness-verifier.md", "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "from": "core/roles/verifier.md", "mode": "generated" },
+    { "path": ".claude/settings.json", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "from": "adapters/claude-code/settings.json", "mode": "merged",
+      "keys": ["/hooks/Stop/0", "/permissions/deny/0"] }
+  ],
+  "blocks": [ { "file": "AGENTS.md", "name": "boundaries", "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }, { "file": "AGENTS.md", "name": "workflow", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" } ],
+  "created": [".harness/", ".claude/agents/harness-verifier.md"]
+}

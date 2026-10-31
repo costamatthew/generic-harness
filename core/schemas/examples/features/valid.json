@@ -1,0 +1,10 @@
+{
+  "schema": 0,
+  "features": [
+    { "id": "GEN-001", "title": "Esqueleto andante", "priority": "P1", "status": "done", "dependsOn": [],
+      "acceptance": ["WHEN o CI roda no esqueleto THEN o pipeline SHALL sair com 0 e o teste SHALL falhar sob mutação"],
+      "spec": ".harness/work/GEN-001/spec.md", "evidence": ".harness/runs/20261030T141500Z-a1b2c3/manifest.json" },
+    { "id": "FEAT-001", "title": "Cliente cria pedido", "epic": "pedidos", "priority": "P1", "status": "todo", "dependsOn": ["GEN-001"],
+      "acceptance": ["WHEN um cliente envia um pedido válido THEN o sistema SHALL registrar e devolver o número"], "spec": null }
+  ]
+}

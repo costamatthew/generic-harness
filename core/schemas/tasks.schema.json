@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/tasks/v0",
+  "title": "tasks.json v0",
+  "description": "Status das tasks de um item de trabalho, em .harness/work/<ID>/tasks.json (HG M2, S2). Só `harness task` escreve este arquivo (ADR-0003). Uma task `done` aponta para o manifesto do run que a aprovou.",
+  "type": "object",
+  "required": ["schema", "workId", "tasks"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": 0 },
+    "workId": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 0, "description": "Incrementado a cada escrita; controle de concorrência otimista (HG §3.7)." },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/task" }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Z][A-Z0-9]*-\\d+$" },
+    "taskId": { "type": "string", "pattern": "^([A-Z][A-Z0-9]*-\\d+\\.)?T\\d+$" },
+    "task": {
+      "type": "object",
+      "required": ["id", "title", "status", "dod"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/taskId" },
+        "title": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["todo", "in-progress", "done", "blocked"] },
+        "requirements": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "IDs de requisito da spec (P13)." },
+        "dependsOn": { "type": "array", "items": { "$ref": "#/$defs/taskId" } },
+        "dod": {
+          "type": "object",
+          "description": "Definition of Done: o que o gate roda (nomes de comandos do perfil) e onde ficam os testes da task.",
+          "required": ["commands"],
+          "additionalProperties": false,
+          "properties": {
+            "commands": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)?$" } },
+            "tests": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+            "checks": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "Checks binários para o verifier." }
+          }
+        },
+        "noTests": {
+          "type": "object",
+          "description": "Task sem teste, só com aprovação humana (HG §3.5).",
+          "required": ["reason", "approvedBy"],
+          "additionalProperties": false,
+          "properties": {
+            "reason": { "type": "string", "minLength": 1 },
+            "approvedBy": { "type": "string", "minLength": 1 }
+          }
+        },
+        "blocker": {
+          "type": "object",
+          "required": ["reason", "at"],
+          "additionalProperties": false,
+          "properties": {
+            "reason": { "type": "string", "minLength": 1 },
+            "at": { "type": "string" },
+            "needs": { "type": "string", "description": "O que destrava (decisão humana, sensor, dependência)." }
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "required": ["runId", "attempt", "manifest", "tree"],
+          "additionalProperties": false,
+          "properties": {
+            "runId": { "type": "string", "minLength": 1 },
+            "attempt": { "type": "integer", "minimum": 1 },
+            "manifest": { "type": "string", "minLength": 1 },
+            "manifestSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "tree": { "type": "string", "pattern": "^[0-9a-f]{7,64}$" }
+          }
+        },
+        "updatedAt": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "done" } } },
+          "then": { "required": ["evidence"] }
+        },
+        {
+          "if": { "properties": { "status": { "const": "blocked" } } },
+          "then": { "required": ["blocker"] }
+        }
+      ]
+    }
+  }
+}

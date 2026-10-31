@@ -1,0 +1,6 @@
+{
+  "schema": 0,
+  "project": { "name": "x", "kind": "brownfield" },
+  "commands": { "build": { "run": "make build" } },
+  "boundaries": { "always": [], "ask": [], "never": [] }
+}

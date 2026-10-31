@@ -1,0 +1,2 @@
+{ "contract": "hook/v0", "hook": "session_bootstrap", "decision": "allow",
+  "context": ["Task atual: PAG-12.T2 (blocked: sandbox do gateway fora do ar)", "Último gate: T1 pass tree=3f9c1e2", "Próximo passo: ler .harness/STATE.md"] }

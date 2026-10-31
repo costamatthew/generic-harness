@@ -1,0 +1,12 @@
+{
+  "contract": "cli/v0", "command": "gate", "status": "fail", "exit": 1,
+  "summary": [
+    "GATE T5 test.unit  FAIL exit=1  12.4s  tree=3f9c1e2",
+    "tests 41  failed 1  skipped 0",
+    "  src/billing/test_payment.py:57  [PAG-03] recusado mantém carrinho",
+    "log: .harness/runs/20261030T141500Z-a1b2c3/test.unit.log"
+  ],
+  "next": "Corrija a falha em src/billing/test_payment.py:57 e rode `harness gate T5` de novo.",
+  "data": { "manifest": ".harness/runs/20261030T141500Z-a1b2c3/manifest.json" },
+  "logs": [".harness/runs/20261030T141500Z-a1b2c3/test.unit.log"]
+}

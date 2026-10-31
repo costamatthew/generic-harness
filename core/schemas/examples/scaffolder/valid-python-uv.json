@@ -1,0 +1,16 @@
+{
+  "id": "python-uv-app",
+  "ecosystem": "python",
+  "when": { "stack": { "language": "python", "packageManager": "uv" } },
+  "generate": { "run": "uv init --app {name}", "interactive": false, "network": true },
+  "addons": [
+    { "for": "test", "run": "uv add --dev pytest", "network": true,
+      "profile": { "test.unit.run": "uv run pytest --junitxml=.harness/runs/unit.xml", "test.unit.report": ".harness/runs/unit.xml" } },
+    { "for": "lint", "run": "uv add --dev ruff", "network": true,
+      "profile": { "lint.run": "uv run ruff check .", "lint.fix": "uv run ruff check --fix ." } }
+  ],
+  "removeAfter": ["main.py"],
+  "ciTemplate": "github-actions/python-uv.yml",
+  "source": "https://docs.astral.sh/uv/",
+  "testedVersion": "a definir na trilha 2E"
+}

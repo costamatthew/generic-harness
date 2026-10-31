@@ -1,0 +1,9 @@
+{
+  "contract": "hook/v0", "hook": "stop_gate", "decision": "block",
+  "message": {
+    "what": "A task T5 está em andamento e o último gate saiu vermelho (exit=1).",
+    "why": "Uma task só termina pelo caminho autorizado, com gate verde na árvore atual.",
+    "instead": "Rode `harness task done T5`; se não der para concluir, registre o blocker com `harness task block T5 --reason \"...\"`."
+  },
+  "log": ".harness/runs/20261030T141500Z-a1b2c3/manifest.json"
+}

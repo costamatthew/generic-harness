@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://generic-harness/schemas/cli-output/v0",
+  "title": "Envelope `--json` do CLI v0",
+  "description": "Saída de qualquer subcomando com `--json` (HG §3.5; E0-a). Sem `--json`, o CLI imprime as linhas de `summary` e nada mais. `exit` repete o código de saída do processo. Ver docs/contracts/cli.md.",
+  "type": "object",
+  "required": ["contract", "command", "status", "exit", "summary"],
+  "additionalProperties": false,
+  "properties": {
+    "contract": { "const": "cli/v0" },
+    "command": { "type": "string", "pattern": "^[a-z][a-z-]*( [a-z][a-z-]*)?$", "description": "Subcomando, ex.: 'task done'." },
+    "status": { "enum": ["ok", "fail", "usage", "sensor-absent", "refused", "error", "not-implemented"] },
+    "exit": { "enum": [0, 1, 2, 3, 4, 5, 10] },
+    "summary": {
+      "type": "array",
+      "description": "A saída enxuta: o que entra no contexto do agente.",
+      "minItems": 1,
+      "maxItems": 40,
+      "items": { "type": "string", "maxLength": 200 }
+    },
+    "next": { "type": "string", "description": "Próxima ação sugerida, escrita para o agente (P15). Na saída de texto vira a última linha, com '→ '." },
+    "data": { "type": "object", "description": "Carga específica do subcomando (ex.: manifesto do gate)." },
+    "logs": { "type": "array", "items": { "type": "string" } },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "message"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+          "message": { "type": "string", "minLength": 1 },
+          "where": { "type": "string", "description": "arquivo:linha ou ponteiro JSON." }
+        }
+      }
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "status": { "const": "ok" } } }, "then": { "properties": { "exit": { "const": 0 } } } },
+    { "if": { "properties": { "status": { "const": "fail" } } }, "then": { "properties": { "exit": { "const": 1 } } } },
+    { "if": { "properties": { "status": { "const": "usage" } } }, "then": { "properties": { "exit": { "const": 2 } } } },
+    { "if": { "properties": { "status": { "const": "sensor-absent" } } }, "then": { "properties": { "exit": { "const": 3 } } } },
+    { "if": { "properties": { "status": { "const": "refused" } } }, "then": { "properties": { "exit": { "const": 4 } } } },
+    { "if": { "properties": { "status": { "const": "error" } } }, "then": { "properties": { "exit": { "const": 5 } } } },
+    { "if": { "properties": { "status": { "const": "not-implemented" } } }, "then": { "properties": { "exit": { "const": 10 } } } }
+  ]
+}

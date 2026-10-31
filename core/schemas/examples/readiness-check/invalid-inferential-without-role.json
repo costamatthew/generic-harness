@@ -1,0 +1,2 @@
+{ "id": "R15", "level": "P1", "kind": "inferential", "scope": "repo", "check": "instructions-agree",
+  "guide": ["BF §4.2"], "evidence": "trechos divergentes com arquivo:linha" }

@@ -1,0 +1,2 @@
+{ "contract": "hook/v0", "event": "pre_tool", "source": { "tool": "claude-code" },
+  "session": { "id": "abc123", "projectDir": "/p", "cwd": "/p" }, "tool": { "kind": "shell", "name": "Bash" } }

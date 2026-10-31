@@ -1,0 +1,17 @@
+{
+  "schema": 0,
+  "workId": "PAG-12",
+  "revision": 4,
+  "tasks": [
+    { "id": "T1", "title": "Recusar pagamento mantém o carrinho", "status": "done", "requirements": ["PAG-03"],
+      "dod": { "commands": ["lint", "test.unit"], "tests": ["tests/unit/test_pagamento.py"], "checks": ["PAG-03: carrinho intacto após recusa"] },
+      "evidence": { "runId": "20261030T141500Z-a1b2c3", "attempt": 2, "manifest": ".harness/runs/20261030T141500Z-a1b2c3/manifest.json",
+                    "manifestSha256": "3f9c1e2a0b4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7", "tree": "3f9c1e2" },
+      "updatedAt": "2026-10-30T14:16:02Z" },
+    { "id": "T2", "title": "Estornar pagamento duplicado", "status": "blocked", "dependsOn": ["T1"],
+      "dod": { "commands": ["test.unit", "test.integration"] },
+      "blocker": { "reason": "sandbox do gateway fora do ar", "at": "2026-10-30T15:00:00Z", "needs": "credencial de sandbox" } },
+    { "id": "T3", "title": "Renomear seção do README", "status": "todo",
+      "dod": { "commands": ["lint"] }, "noTests": { "reason": "mudança só de documentação", "approvedBy": "mateus" } }
+  ]
+}

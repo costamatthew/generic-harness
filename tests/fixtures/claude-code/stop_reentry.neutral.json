@@ -1,0 +1,3 @@
+{ "contract": "hook/v0", "event": "stop", "source": { "tool": "claude-code", "nativeEvent": "Stop" },
+  "session": { "id": "abc123", "projectDir": "/home/dev/pedidos", "cwd": "/home/dev/pedidos" },
+  "stop": { "reentry": true, "lastMessage": "Corrigi e rodei o gate." } }

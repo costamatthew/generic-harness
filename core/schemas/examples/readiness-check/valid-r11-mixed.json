@@ -1,0 +1,5 @@
+{
+  "id": "R11", "level": "P1", "kind": "mixed", "scope": "repo", "check": "boundaries-three-levels",
+  "guide": ["cap. 4"], "evidence": "bloco BOUNDARIES com always/ask/never; cada never com instead", "role": "auditor",
+  "fix": { "recipe": "agents-md-boundaries", "size": "quick" }
+}

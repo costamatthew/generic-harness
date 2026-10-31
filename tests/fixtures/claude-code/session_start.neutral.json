@@ -1,0 +1,3 @@
+{ "contract": "hook/v0", "event": "session_start", "source": { "tool": "claude-code", "nativeEvent": "SessionStart" },
+  "session": { "id": "abc123", "projectDir": "/home/dev/pedidos", "cwd": "/home/dev/pedidos" },
+  "sessionStart": { "reason": "compact" } }

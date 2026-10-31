@@ -1,0 +1,2 @@
+{ "id": "R5", "level": "P0", "kind": "computational", "scope": "app", "check": "sensor-proves-red",
+  "guide": ["GF §6.3"], "evidence": "dois runs" }
