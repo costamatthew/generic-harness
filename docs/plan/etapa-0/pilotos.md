@@ -6,9 +6,9 @@
 
 | Piloto | Requisito | Usado em | Escolha |
 | --- | --- | --- | --- |
-| **BF-N0** | repo real, sem nenhum arquivo de IA (BF §4.1), com testes que rodam e saem com 0 | 1I, 2I, 3I | _a definir_ |
-| **BF-N1** | repo real com AGENTS.md ou CLAUDE.md, **em outra linguagem** que o N0 | 2I, 3I | _a definir_ |
-| **GF-G0** | diretório vazio numa **terceira** stack, com gerador oficial não interativo (GF §6.2) | 2I, 3I | _a definir_ |
+| **BF-N0** | repo real, sem nenhum arquivo de IA (BF §4.1), com testes que rodam e saem com 0 | 1I, 2I, 3I | ~/projets/midcortes |
+| **BF-N1** | repo real com AGENTS.md ou CLAUDE.md, **em outra linguagem** que o N0 | 2I, 3I | ~/profit/profit-app-flutter |
+| **GF-G0** | diretório vazio numa **terceira** stack, com gerador oficial não interativo (GF §6.2) | 2I, 3I | ~/projets/html-simples |
 
 **O que a escolha destrava:**
 
