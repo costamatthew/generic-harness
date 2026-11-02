@@ -17,7 +17,7 @@ Comando do CLI: `python3 .harness/bin/harness <comando>` (abaixo abreviado `harn
 
 ## Loop L1 (cap. 17)
 
-1. **Ler.** Abra a task em `tasks.json` e o `task.md` dela, e leia o `STATE.md` (decisões, blockers, handoff). Comando de apoio: `harness task status <ID>`. Fique no escopo: arquivos e `dod.commands` da task. Se o escopo parecer errado, vá ao passo 8 de bloqueio (`task block`), não alargue.
+1. **Ler.** Abra a task em `tasks.json` e o `task.md` dela, e leia o `STATE.md` (decisões, blockers, handoff). Comando de apoio: `harness task status <ID>`. Fique no escopo: arquivos e `dod.commands` da task. Se o escopo parecer errado, registre `harness task block <ID> --reason "escopo"` (ver "O que fazer em cada saída"), não alargue.
 2. **Implementar** só o que a task pede, com os testes dela. Não apague nem enfraqueça teste para ficar verde; se um teste parecer errado, registre um blocker.
 3. **Gate.** Rode `harness gate <ID>`. Ele roda os `dod.commands` do perfil e grava o manifesto em `.harness/runs/`.
 4. **Corrigir.** Se o exit for 1, leia as linhas `arquivo:linha` da saída, corrija e volte ao passo 3. No máximo `limits.maxFixIterations` vezes (perfil). Estourou: `harness task block <ID> --reason "<o que falha>" --needs "decisão humana"` e pare.
@@ -44,9 +44,11 @@ Se tentar encerrar com uma task `in-progress` sem gate verde na árvore atual e 
 
 ## Proibido (e o que fazer no lugar)
 
-- Não escreva em `tasks.json`, `.harness/runs/**`, no bloco de evidência de `validation.md` nem no perfil (ADR-0003), mesmo que o shell permita. No lugar: use `harness task done|block` e `harness state`. Precisa mudar o perfil? Registre um blocker pedindo a pessoa.
-- Não declare a task pronta por conta própria. No lugar: gate verde + verifier + `task done`.
-- Não chame o verifier com `model` nem com o seu raciocínio. No lugar: só ID, checks, `tree` e arquivos tocados.
-- Não rode outro comando quando o exit for 3. No lugar: veja a tabela acima.
-- Não faça trabalho fora do escopo da task. No lugar: anote em "Ideias para depois" do `STATE.md` e siga.
-- Não faça push, merge nem `git add -A` cego. No lugar: proponha o commit com os arquivos da task.
+Fundamento: cap. 13 (enforcement por sensor, não por promessa), cap. 12 (loop de implementação) e cap. 11 (subagentes com contexto limpo). Cada regra cita o seu.
+
+- Não escreva em `tasks.json`, `.harness/runs/**`, no bloco de evidência de `validation.md` nem no perfil (ADR-0003; cap. 13), mesmo que o shell permita. No lugar: use `harness task done|block` e `harness state`. Precisa mudar o perfil? Registre um blocker pedindo a pessoa.
+- Não declare a task pronta por conta própria (cap. 12 e 13). No lugar: gate verde + verifier + `task done`.
+- Não chame o verifier com `model` nem com o seu raciocínio (cap. 11 e 13). No lugar: só ID, checks, `tree` e arquivos tocados.
+- Não rode outro comando quando o exit for 3 (cap. 12). No lugar: veja a tabela acima.
+- Não faça trabalho fora do escopo da task (cap. 17). No lugar: anote em "Ideias para depois" do `STATE.md` e siga.
+- Não faça push, merge nem `git add -A` cego (cap. 17). No lugar: proponha o commit com os arquivos da task.
