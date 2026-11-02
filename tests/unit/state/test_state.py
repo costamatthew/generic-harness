@@ -72,3 +72,12 @@ def test_blocks_unit():
     with pytest.raises(blocks.BlockError):
         blocks.replace(t, "y", "z")
     assert blocks.get(blocks.append("fim", "y", "k"), "y") == "k"
+
+
+def test_blocks_get_aceita_crlf():
+    # Achado do CI no Windows: o checkout com CRLF fazia o bloco vazio voltar como "\r".
+    from core.lib import blocks
+    text = "x\r\n<!-- harness:begin handoff -->\r\n<!-- harness:end handoff -->\r\n"
+    assert blocks.get(text, "handoff") == ""
+    text = "<!-- harness:begin handoff -->\r\nfeito\r\n<!-- harness:end handoff -->"
+    assert blocks.get(text, "handoff") == "feito"

@@ -44,8 +44,9 @@ def get(text: str, name: str) -> str | None:
     if sp is None:
         return None
     inner = text[sp[1]:sp[2]]
-    inner = inner[1:] if inner.startswith("\n") else inner
-    return inner[:-1] if inner.endswith("\n") else inner
+    # Arquivo do hospedeiro com CRLF (checkout no Windows): a quebra de linha pode ser \r\n.
+    inner = inner[2:] if inner.startswith("\r\n") else inner[1:] if inner.startswith("\n") else inner
+    return inner[:-2] if inner.endswith("\r\n") else inner[:-1] if inner.endswith("\n") else inner
 
 
 def replace(text: str, name: str, content: str) -> str:

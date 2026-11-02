@@ -250,5 +250,6 @@ def test_cli_json_and_prove_sensor(tmp_path):
 def test_manifest_paths_use_forward_slashes(tmp_path):
     root = setup(tmp_path, {"test": R.unit(D / "xunit2-pass.xml")}, ["test.unit"])
     _, m = gate(root)
-    text = json.dumps(m)
+    # `run` é o texto do perfil, copiado como veio (no Windows tem `\`); os caminhos que o harness grava, não.
+    text = json.dumps({**m, "checks": [{k: v for k, v in c.items() if k != "run"} for c in m["checks"]]})
     assert "\\\\" not in text

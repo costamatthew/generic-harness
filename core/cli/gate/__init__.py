@@ -246,7 +246,7 @@ def _run_check(root: Path, run_dir: Path, name: str, cmd: dict, start_mtime: flo
         return check
     if code is None:
         return check  # status error
-    if code in TOOL_MISSING_EXITS:
+    if code in TOOL_MISSING_EXITS or _missing_on_windows(cmd["run"], root / cmd.get("cwd", "."), code):
         check["status"] = "unavailable"
         check["absent"] = {"reason": "tool-missing"}
         return check
@@ -255,6 +255,17 @@ def _run_check(root: Path, run_dir: Path, name: str, cmd: dict, start_mtime: flo
     if cmd.get("report") and cmd.get("reportFormat") == "junit":
         _read_report(root, run_dir, name, cmd["report"], start_mtime, check, notes)
     return check
+
+
+def _missing_on_windows(command: str, cwd: Path, code: int | None) -> bool:
+    """No Windows, `cmd /c` sai com 1 (não 9009) quando o executável não existe.
+    Então, com exit != 0, confere se o primeiro token resolve. Um builtin do cmd que falha
+    (`dir x`) vira `tool-missing`: continua não sendo `pass`, e o `task done` recusa do mesmo jeito."""
+    if os.name != "nt" or code in (0, None):
+        return False
+    text = command.strip()
+    exe = text[1:].split('"', 1)[0] if text.startswith('"') else (text.split() or [""])[0]
+    return bool(exe) and shutil.which(exe) is None and not (cwd / exe).exists()
 
 
 def _execute(command: str, cwd: Path, log, timeout: int) -> tuple[int | None, bool]:
