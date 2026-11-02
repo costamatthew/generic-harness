@@ -1,0 +1,16 @@
+{
+  "schema": 0,
+  "workId": "TODO-1",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "TODO título curto da task",
+      "status": "todo",
+      "dod": {
+        "commands": ["test.unit"],
+        "tests": ["tests/TODO"],
+        "checks": ["TODO check binário verificável"]
+      }
+    }
+  ]
+}
