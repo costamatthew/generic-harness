@@ -1,0 +1,5 @@
+{
+  "harness-execute": {
+    "when_to_use": "Ao executar uma task do harness: ler a task, implementar dentro do escopo e só concluir com o gate verde."
+  }
+}
