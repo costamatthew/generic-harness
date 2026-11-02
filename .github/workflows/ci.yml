@@ -22,6 +22,16 @@ jobs:
         run: python -m pip install "pytest>=8" "jsonschema>=4.20"
       - name: Testes
         run: python -m pytest --junitxml=reports/junit.xml
+      - name: Falhas como anotações
+        if: failure()
+        shell: python
+        run: |
+          # Anotações são públicas; o log do job exige admin. Uma por teste que falhou.
+          import xml.etree.ElementTree as ET
+          for case in ET.parse("reports/junit.xml").iter("testcase"):
+              for bad in list(case.iter("failure")) + list(case.iter("error")):
+                  msg = (bad.get("message") or "")[:300].replace("\n", " ").replace("%", "%25")
+                  print(f"::error title={case.get('classname')}.{case.get('name')}::{msg}")
       - name: Relatório JUnit
         if: always()
         uses: actions/upload-artifact@v4
