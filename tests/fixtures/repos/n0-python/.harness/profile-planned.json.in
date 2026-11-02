@@ -1,0 +1,52 @@
+{
+  "schema": 0,
+  "project": {
+    "name": "calc",
+    "kind": "brownfield",
+    "aiLevel": "N0"
+  },
+  "commands": {
+    "test": {
+      "unit": {
+        "run": "@PYTHON@ -m pytest -q -o junit_family=xunit1 --junitxml=.harness/runs/junit-unit.xml",
+        "report": ".harness/runs/junit-unit.xml",
+        "reportFormat": "junit",
+        "origin": "decision:ADR-0001",
+        "status": "planned"
+      }
+    }
+  },
+  "boundaries": {
+    "always": [
+      "rodar os testes antes de concluir"
+    ],
+    "ask": [],
+    "never": []
+  },
+  "models": {
+    "tiers": {
+      "fast": {
+        "claude-code": "haiku"
+      },
+      "standard": {
+        "claude-code": "sonnet"
+      },
+      "strong": {
+        "claude-code": "opus"
+      }
+    },
+    "pins": {
+      "verifier": "claude-opus-5-5"
+    }
+  },
+  "roles": {
+    "verifier": {
+      "tier": "strong",
+      "pinned": true,
+      "readonly": true
+    }
+  },
+  "limits": {
+    "stopReentries": 3
+  }
+}

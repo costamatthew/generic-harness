@@ -1,0 +1,24 @@
+{
+  "schema": 0,
+  "workId": "FIX-1",
+  "revision": 0,
+  "tasks": [
+    {
+      "id": "FIX-1.T1",
+      "title": "Somar números",
+      "status": "in-progress",
+      "dod": {
+        "commands": ["test.unit"],
+        "tests": ["tests/test_calc.py"],
+        "checks": ["add soma dois inteiros", "sub subtrai dois inteiros"]
+      }
+    },
+    {
+      "id": "FIX-1.T2",
+      "title": "Multiplicar números",
+      "status": "todo",
+      "dependsOn": ["FIX-1.T1"],
+      "dod": { "commands": ["test.unit"] }
+    }
+  ]
+}
