@@ -105,10 +105,10 @@ Mudar o contrato em silêncio dentro de uma trilha é o "Tudo no Mesmo Processo"
 | 0.8 | Registrar E0-a…E0-d como ADRs do próprio repo em `docs/decisions/` | cap. 7 |
 
 **Critério de saída (sim/não):**
-- [ ] Os schemas validam seus exemplos válidos e rejeitam os inválidos (`pytest`).
-- [ ] Todas as trilhas da Etapa 1 têm, para o que consomem, schema, exemplo e stub.
-- [ ] Os pilotos estão escolhidos e registrados (ou a falta deles está registrada como blocker da integração 1I).
-- [ ] O CI do repo está verde nos três sistemas operacionais.
+- [x] Os schemas validam seus exemplos válidos e rejeitam os inválidos (`pytest`). ([etapa-0/spec.md](etapa-0/spec.md))
+- [x] Todas as trilhas da Etapa 1 têm, para o que consomem, schema, exemplo e stub. ([etapa-0/spec.md](etapa-0/spec.md))
+- [x] Os pilotos estão escolhidos e registrados (ou a falta deles está registrada como blocker da integração 1I). ([pilotos.md](etapa-0/pilotos.md))
+- [x] O CI do repo está verde nos três sistemas operacionais. (run 41375182714 em `bc75beb`; na main integrada, run 41377955165 em `df9242b`)
 
 ---
 
@@ -133,12 +133,12 @@ Mudar o contrato em silêncio dentro de uma trilha é o "Tudo no Mesmo Processo"
 No piloto BF-N0: perfil manual, `harness render`, uma task pequena real, tentativa deliberada de encerrar com vermelho.
 
 **Critério de saída (HG §9 fase 0 + HG §9.1):**
-- [ ] Gate com exit 0 associado ao hash da árvore atual; o manifesto identifica a tentativa, as entradas e os comandos.
-- [ ] `validation.md` tem evidência `arquivo:linha` do verifier, que roda em sub-agent pinado.
-- [ ] `STATE.md` foi atualizado com handoff.
-- [ ] A tentativa de encerrar com gate vermelho **foi bloqueada**.
-- [ ] Um verde antigo, depois de uma edição, é recusado.
-- [ ] Os limites conhecidos da proteção estão escritos (E0-c), sem prometer o que a fase 1 ainda vai demonstrar.
+- [x] Gate com exit 0 associado ao hash da árvore atual; o manifesto identifica a tentativa, as entradas e os comandos. ([1I](etapa-1/1I.md#piloto-n0))
+- [x] `validation.md` tem evidência `arquivo:linha` do verifier, que roda em sub-agent pinado. ([1I, prova 2](etapa-1/1I.md#prova-2-verifier-pinado-e-task-done))
+- [x] `STATE.md` foi atualizado com handoff. ([1I](etapa-1/1I.md#piloto-n0))
+- [x] A tentativa de encerrar com gate vermelho **foi bloqueada**. ([1I, prova 1](etapa-1/1I.md#prova-1-stop-com-vermelho-na-tui))
+- [x] Um verde antigo, depois de uma edição, é recusado. ([1I](etapa-1/1I.md#piloto-n0))
+- [x] Os limites conhecidos da proteção estão escritos (E0-c), sem prometer o que a fase 1 ainda vai demonstrar. ([1I](etapa-1/1I.md#limites-da-proteção-adr-0003-e0-c))
 
 ---
 
