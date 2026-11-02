@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuite name="root" tests="99" failures="99">
+  <testsuite name="a">
+    <testcase classname="tests.test_calc.TestX" name="test_a"><error message="boom">Traceback
+  File "lib/nao_existe.py", line 3
+RuntimeError: boom</error></testcase>
+    <testcase classname="tests.test_calc" name="test_b"><skipped message="pulado"/></testcase>
+    <testsuite name="a.inner">
+      <testcase classname="pkg.nao.existe" name="test_c"><failure message="x">sem local</failure></testcase>
+      <testcase classname="pkg" name="test_d"/>
+    </testsuite>
+  </testsuite>
+  <testsuite name="only-attrs" tests="3" failures="0" errors="1" skipped="1"/>
+</testsuite>
