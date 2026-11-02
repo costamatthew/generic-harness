@@ -69,8 +69,8 @@ def _slurp(p: Path) -> str:
         return fh.read()
 
 
-def read(root: str | Path) -> str:
-    """Texto do STATE.md; cria o arquivo a partir do template se não existe."""
+def read(root: str | Path, create: bool = True) -> str:
+    """Texto do STATE.md; se não existe, usa o template (e grava, com `create`)."""
     p = path(root)
     if p.is_file():
         return _slurp(p)
@@ -78,7 +78,8 @@ def read(root: str | Path) -> str:
         text = _slurp(TEMPLATE)
     except OSError:
         text = FALLBACK
-    fsx.write_atomic(p, text)
+    if create:
+        fsx.write_atomic(p, text)
     return text
 
 
@@ -163,7 +164,7 @@ def run(args) -> Result:
 def state(root: str | Path, handoff: str | None = None) -> Result:
     root = Path(root).resolve()
     try:
-        text = read(root)
+        text = read(root, create=handoff is not None)
         if handoff is not None:
             handoff = " ".join(handoff.split())
             if not handoff:

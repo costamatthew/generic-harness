@@ -31,9 +31,12 @@ fim sem newline"""
 def test_creates_from_template_and_prints(tmp_path):
     res = state(tmp_path)
     assert res.exit == 0 and schema.validate(envelope(res, "state"), "cli-output") == []
+    assert not (tmp_path / STATE_REL).exists()  # ler não escreve
+    state(tmp_path, "primeiro")
     text = (tmp_path / STATE_REL).read_text(encoding="utf-8")
     assert blocks.has(text, "handoff") and blocks.has(text, "tasks")
     assert res.data == {"handoff": "", "blockers": []}
+    assert blocks.get(text, "handoff") != ""
 
 
 def test_handoff_idempotent_and_preserves_outside(tmp_path):
