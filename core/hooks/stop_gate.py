@@ -50,7 +50,9 @@ def in_progress_tasks(root: Path) -> list[str]:
         work = doc.get("workId") or path.parent.name
         for task in doc.get("tasks") or []:
             if isinstance(task, dict) and task.get("status") == "in-progress" and not task.get("blocker"):
-                found.append(f"{work}.{task.get('id')}")
+                tid = str(task.get("id"))
+                # O schema aceita `T1` e `WORK-1.T1`; não qualifica de novo o que já vem qualificado.
+                found.append(tid if "." in tid else f"{work}.{tid}")
     return found
 
 

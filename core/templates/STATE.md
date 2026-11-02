@@ -1,6 +1,6 @@
 # STATE
 
-> Memória de trabalho da feature (cap. 4 e 17). Humano e agente editam as seções livres; os blocos `harness:begin/end` são escritos só pelo CLI (`harness state`, `harness task ...`).
+> Memória de trabalho da feature (cap. 4 e 17). Humano e agente editam as seções livres; os blocos `harness:begin/end` são escritos só pelo CLI (`harness state`, `harness task done`, `harness task block`).
 
 ## Decisões
 

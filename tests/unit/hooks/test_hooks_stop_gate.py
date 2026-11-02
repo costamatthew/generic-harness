@@ -106,3 +106,9 @@ def test_component_off_always_allows(tmp_path):
     write_tasks(tmp_path, [task("T1")])
     (tmp_path / ".harness/profile.json").write_text(json.dumps({"components": {"stopGate": False}}), encoding="utf-8")
     assert decide(tmp_path, {"PAG-12.T1": "not-pass"})["decision"] == "allow"
+
+
+def test_in_progress_aceita_id_ja_qualificado(tmp_path):
+    # Achado da integração 1I: o fixture da 1G grava `FIX-1.T1`, e o schema aceita as duas formas.
+    write_tasks(tmp_path, [task("PAG-12.T1"), task("T2")])
+    assert stop_gate.in_progress_tasks(tmp_path) == ["PAG-12.T1", "PAG-12.T2"]
