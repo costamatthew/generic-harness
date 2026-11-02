@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.02"><testcase classname="tests.test_calc" name="test_ok" time="0.001" /><testcase classname="tests.test_calc" name="test_soma" time="0.001"><failure message="assert 3 == 4">def test_soma():
+&gt;       assert 1 + 2 == 4
+E       assert 3 == 4
+
+tests/test_calc.py:8: AssertionError</failure></testcase></testsuite></testsuites>
