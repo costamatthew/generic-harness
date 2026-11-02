@@ -80,7 +80,8 @@ def _git_next(root: Path, ref: work.TaskRef) -> str:
         if rec[0] in "RC":
             i += 1  # o caminho de origem vem no registro seguinte
         path = rec[3:]
-        if not path.startswith(".harness/runs/"):
+        # O lock é removido quando o `task done` sai; um `git add` dele faria o comando inteiro falhar.
+        if not path.startswith(".harness/runs/") and not path.endswith(f"/{journal.JOURNAL_DIR}/lock"):
             files.append(path)
     add = "-A" if (not files or len(files) > GIT_ADD_LIMIT) else " ".join(shlex.quote(f) for f in files)
     msg = shlex.quote(ref.qualified_id + ": " + ref.task["title"])

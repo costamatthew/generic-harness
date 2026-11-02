@@ -52,6 +52,8 @@ def test_done_ok_three_writes_and_revision(tmp_path):
     st = (tmp_path / ".harness/STATE.md").read_text(encoding="utf-8")
     assert f"- PAG-1.T1 · done · run={m['runId']}" in blocks.get(st, "tasks")
     assert env["next"].startswith("git add ") and "git commit -m" in env["next"] and "PAG-1.T1: Recusar pagamento" in env["next"]
+    # o lock some ao fim do `task done`; sugerir `git add` dele faz o comando inteiro falhar (piloto 1I)
+    assert ".journal/lock" not in env["next"]
     # rodar de novo: já concluída, nada duplica
     again = task_done(tmp_path, "PAG-1.T1")
     assert again.exit == 4 and "já concluída" in again.summary[-1] and m["runId"] in again.summary[-1]
