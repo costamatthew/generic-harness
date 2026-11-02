@@ -114,6 +114,20 @@ def test_verifier_cases_exit_4(tmp_path, name, mutate):
     assert H.tasks_path(tmp_path).read_bytes() == before
 
 
+def test_verifier_multiple_refs_in_cell_exit_4_says_one_value(tmp_path):
+    """Achado da prova 2 da 1I: várias referências e prosa na célula Evidência."""
+    m = _ready(tmp_path)
+    tree = m["inputs"]["tree"][:7]
+    text = H.VERIFIER.format(tree=tree).replace(
+        "src/app.py:1 |", "src/app.py:1 (dados em :3), src/app.py:5; exec: pytest exit=0 |")
+    H.write_verifier(tmp_path, text)
+    res = task_done(tmp_path, "T1")
+    assert res.exit == 4
+    assert all(len(ln) <= 200 and not ln.endswith("…") for ln in res.summary)
+    assert "um valor só" in res.summary[-1]
+    assert "verifier" in res.summary[-1]
+
+
 def test_done_refuses_blocked(tmp_path):
     _ready(tmp_path)
     assert task_block(tmp_path, "T1", "falta credencial").exit == 0

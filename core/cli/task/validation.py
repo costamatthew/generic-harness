@@ -77,8 +77,11 @@ def verify(text: str, task_ids: tuple[str, ...], checks: list[str], manifest_tre
                     f"e chame o verifier de novo.")
         m = EXEC_RE.match(row.evidence)
         if not (FILE_LINE_RE.match(row.evidence) or (m and m.group(1) == "0")):
-            return (f"check {i} ('{check}') diz 'atende' sem evidência válida em {where} (veio '{row.evidence}'). "
-                    f"Exija 'arquivo:linha' ou 'exec: <comando> exit=0'; sem evidência o check não está atendido.")
+            got = row.evidence if len(row.evidence) <= 40 else row.evidence[:39] + "…"
+            # Duas linhas: a instrução não pode sumir no corte de linha longa (P15).
+            return (f"check {i} ('{check}') diz 'atende' sem evidência válida em {where} (veio '{got}').\n"
+                    f"A célula Evidência aceita um valor só, sem prosa nem lista: 'arquivo:linha' ou "
+                    f"'exec: <comando> exit=0'. Peça ao verifier para refazer a linha com uma única referência.")
     return None
 
 

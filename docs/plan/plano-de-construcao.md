@@ -39,7 +39,7 @@ As pesquisas deixam D1–D45 abertas. O plano adota a recomendação de cada uma
 | # | O que escolher | Uso |
 | --- | --- | --- |
 | D5, D21 | **Piloto BF-N0**: repo real, sem estrutura de IA, com testes que rodam. **Piloto BF-N1**: repo real com AGENTS.md/CLAUDE.md, em outra linguagem | Etapas 1–3 |
-| D45 | **Piloto GF-G0**: diretório vazio numa terceira stack | Etapas 2–3 |
+| D45 | **Piloto GF-G0**: diretório vazio numa terceira stack. **Decidido:** JavaScript, Vite `vanilla` + Vitest ([pilotos.md](etapa-0/pilotos.md#stack-do-g0-d45-decidida-em-02112026)) | Etapas 2–3 |
 
 **Decisões que a Etapa 0 precisa tomar** (as pesquisas deixaram em aberto ou se contradizem):
 
@@ -72,7 +72,7 @@ Cada trilha é dona de um diretório. Duas trilhas paralelas não editam o mesmo
 ### 2.2 Regras de execução
 
 - **Uma trilha, uma worktree, uma branch** (`etapa-N/<trilha>`). M6 do HG: worktrees para paralelismo.
-- **Cada trilha faz o RPI dela.** Spec curta em `docs/plan/etapa-N/<trilha>.md`, implementação numa janela nova, gate verde. Até a Etapa 1 terminar, o gate é o `pytest` do repo. Daí em diante, é o próprio `harness gate` (dogfooding, seção 8).
+- **Cada trilha faz o RPI dela.** Spec curta em `docs/plan/etapa-N/<trilha>.md`, implementação numa janela nova, gate verde. O gate é o `pytest` do repo até este repo ter um perfil próprio, o que depende do `apply` da 2B. A integração 2I roda o `apply` aqui também; daí em diante o gate é o próprio `harness gate` (dogfooding, seção 8). A Etapa 1 fechou sem perfil, então a troca ficou para a 2I.
 - **Integração no fim de cada etapa**, numa janela só, sequencial: merge das trilhas, piloto e critério de saída.
 - **A etapa seguinte só começa depois do critério de saída da anterior** (HG §9). Enquanto a integração acontece, já dá para adiantar duas coisas: a spec da próxima etapa e fixtures. Código, não.
 
@@ -165,7 +165,8 @@ No piloto BF-N0: perfil manual, `harness render`, uma task pequena real, tentati
 | --- | --- | --- |
 | **BF-N0** | detect → plan → aprovar → apply → primeiro READY pela fábrica | [ ] o bootstrap termina com um READY aceito como primeiro loop · [ ] rodar `apply` duas vezes não muda nada na segunda · [ ] rodar `assess` duas vezes dá o mesmo `readiness.json` · [ ] janela principal < 40% e leitura em massa num sub-agent `fast` |
 | **BF-N1** | detect → plan → apply | [ ] só os blocos marcados foram tocados · [ ] os conflitos entre arquivos de instrução foram listados, não resolvidos |
-| **GF-G0** | classificar → brief → ADRs → apply (comandos `planned`) → `GEN-001` | [ ] CI verde, comandos `verified`, R05 verde · [ ] uma task tentada antes do esqueleto é bloqueada por sensor ausente |
+| **GF-G0** | em `~/projets/html-simples-g0`, vazio: classificar → brief → ADRs → apply (comandos `planned`) → `GEN-001` | [ ] CI verde, comandos `verified`, R05 verde · [ ] uma task tentada antes do esqueleto é bloqueada por sensor ausente |
+| **generic-harness** (dogfooding) | detect → plan → apply neste repo | [ ] `harness gate` verde com o `pytest` como `test.unit`, e o AGENTS.md e o §2.2 passam a citar `harness gate` como gate |
 
 ---
 

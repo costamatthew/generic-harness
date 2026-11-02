@@ -25,7 +25,7 @@ Harness externo, genérico e vendorizável para agentes de código: núcleo + ad
 | O quê | Comando |
 | --- | --- |
 | ambiente de dev | `python3 -m venv .venv && .venv/bin/pip install pytest jsonschema` |
-| testes (é o gate até a Etapa 1 terminar) | `.venv/bin/python -m pytest` |
+| testes (é o gate até a 2I aplicar o perfil neste repo; plano §2.2) | `.venv/bin/python -m pytest` |
 | validar um arquivo contra um schema | `python3 bootstrap.py validate <schema> <arquivo>` |
 | CLI | `python3 bootstrap.py [--json] <comando>` |
 

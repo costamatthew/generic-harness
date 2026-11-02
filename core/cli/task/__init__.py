@@ -146,7 +146,8 @@ def _done_locked(root: Path, task_id: str, ref: work.TaskRef, check, latest) -> 
         problem = validation.verify(validation.read(ref.work_dir), (qid, ref.local_id), checks,
                                     manifest["inputs"]["tree"], label)
         if problem:
-            return _res("refused", [*notes, f"TASK done {qid}  {problem}"],
+            first, *rest = problem.split("\n")
+            return _res("refused", [*notes, f"TASK done {qid}  {first}", *rest],
                         "Corrija a seção Verifier em validation.md (ou rode o verifier de novo) e repita `harness task done`.",
                         code="VERIFIER")
 
