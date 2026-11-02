@@ -71,6 +71,10 @@ def make_envelope(manifest: dict, manifest_path: str) -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
+    # O contrato de hook é UTF-8 em qualquer SO; no Windows o stdio padrão é cp1252.
+    for stream in (sys.stdin, sys.stdout):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser()
     p.add_argument("task_id")
     p.add_argument("--result", choices=list(RESULT_TO_STATUS), default="pass")

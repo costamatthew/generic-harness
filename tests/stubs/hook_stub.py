@@ -25,6 +25,10 @@ def decide(event: dict, decision: str = "allow") -> dict:
 
 
 def main() -> int:
+    # O contrato de hook é UTF-8 em qualquer SO; no Windows o stdio padrão é cp1252.
+    for stream in (sys.stdin, sys.stdout):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     event = json.load(sys.stdin)
     result = decide(event, os.environ.get("HARNESS_STUB_DECISION", "allow"))
     print(json.dumps(result, ensure_ascii=False))
